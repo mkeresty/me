@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .bg { fill: #08090c }
+    .mk { stroke: #f2f4f8 }
+    .bar { fill: #6b8afd }
+    @media (prefers-color-scheme: light) {
+      .bg { fill: #f4f6f9 }
+      .mk { stroke: #070910 }
+      .bar { fill: #3a54c4 }
+    }
+  </style>
+  <rect class="bg" width="32" height="32"/>
+  <path class="mk" d="M6 20.5V5.5l10 10 10-10v15" fill="none" stroke-width="3.6"
+        stroke-linejoin="miter" stroke-linecap="butt"/>
+  <rect class="bar" x="6" y="24.5" width="20" height="3.5"/>
+</svg>

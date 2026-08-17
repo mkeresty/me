@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "resume": "node scripts/build-resume.mjs"
+    "resume": "node scripts/build-resume.mjs",
+    "icons": "node scripts/build-icons.mjs"
   },
   "dependencies": {
     "@react-three/fiber": "^9.1.0",
