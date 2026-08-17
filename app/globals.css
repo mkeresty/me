@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+/* ==================================================================
+   Design tokens
+   ------------------------------------------------------------------
+   Palette: a blue-shifted void rather than neutral black, so the
+   Cherenkov-blue signal sits *in* the surface instead of on top of it.
+   Amber and rose appear in exactly one place — the plan gutter — where
+   add / change / destroy carry real meaning.
+   ================================================================== */
+@theme {
+  --color-void: #08090c;
+  --color-surface: #0d0f15;
+  --color-raised: #12151d;
+  --color-rule: #1a1e27;
+  --color-rule-lit: #272d3a;
+
+  --color-dim: #5f6672;
+  --color-mid: #8b93a3;
+  --color-text: #d6dae3;
+  --color-bright: #f2f4f8;
+
+  --color-signal: #6b8afd;
+  --color-signal-deep: #3d55b8;
+  --color-signal-wash: #151b33;
+
+  --color-amber: #e8a33d;
+  --color-rose: #d8656f;
+
+  --font-display: var(--font-martian), ui-monospace, monospace;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.18em;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==================================================================
+   Base
+   ================================================================== */
+html {
+  scroll-behavior: smooth;
+  /* The fixed rail is only present at lg+, but anchor offsets matter
+     at every width because of the sticky section headers. */
+  scroll-padding-top: 5rem;
+  background-color: var(--color-void);
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-void);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: var(--color-signal);
+  color: var(--color-void);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* Subtle scrollbar — present, but not competing with the content. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule-lit) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-rule-lit);
+  border: 3px solid var(--color-void);
+  border-radius: 99px;
+}
+
+/* ==================================================================
+   Utilities
+   ================================================================== */
+
+/* The measured, engineered feel of the display face comes from tight
+   tracking at large sizes — Martian Mono is wide by default. */
+@utility display-tight {
+  font-family: var(--font-display);
+  letter-spacing: -0.055em;
+  font-weight: 700;
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+/* Hairline grid backdrop. Used behind the hero only, so the rest of
+   the page reads as plain surface by contrast. */
+@utility grid-field {
+  background-image:
+    linear-gradient(to right, var(--color-rule) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-rule) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* ==================================================================
+   Motion
+   ================================================================== */
+@keyframes sweep {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  8%,
+  92% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-sweep {
+  animation: sweep 7s var(--ease-out-expo) infinite;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
