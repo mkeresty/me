@@ -49,7 +49,8 @@ const CSS = `
   ul { margin: 0 0 6pt; padding-left: 13pt; }
   li { margin-bottom: 2.6pt; }
   strong { color: #0b1020; }
-  a { color: inherit; text-decoration: none; }
+  /* The site URL in the contact line should read as a link, not body text. */
+  a { color: #3d55b8; text-decoration: none; font-weight: 500; }
   /* Keep a role's heading with at least the start of its bullets. */
   h3, h4 { break-after: avoid; page-break-after: avoid; }
   li { break-inside: avoid; page-break-inside: avoid; }

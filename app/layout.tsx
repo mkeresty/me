@@ -3,6 +3,7 @@ import { Martian_Mono } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { profile } from "@/lib/content";
+import { THEME_INIT_SCRIPT } from "@/components/theme";
 import "./globals.css";
 
 /**
@@ -52,8 +53,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#08090c",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#08090c" },
+    { media: "(prefers-color-scheme: light)", color: "#f4f6f9" },
+  ],
+  colorScheme: "dark light",
 };
 
 export default function RootLayout({
@@ -65,6 +69,11 @@ export default function RootLayout({
       className={`${martian.variable} ${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Stamps data-theme before first paint so the page never flashes
+            the wrong theme. Must stay inline and render-blocking. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="bg-void text-text antialiased">
         {/*
           Entrance animations render as inline opacity:0 in the prerendered

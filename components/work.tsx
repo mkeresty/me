@@ -15,9 +15,11 @@ export function Work() {
         {projects.map((p, i) => (
           <Reveal key={p.id} delay={i * 0.04}>
             <article className="group border-rule relative border-b py-10 md:py-14">
-              {/* Left edge marker — the only thing that moves on hover. */}
+              {/* Left edge marker — the only thing that moves on hover.
+                  It sits out in the gutter so the content stays aligned
+                  with every other section rather than indenting on hover. */}
               <span
-                className="bg-signal absolute top-0 -left-px h-full w-px origin-top scale-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-y-100"
+                className="bg-signal absolute top-0 -left-4 h-full w-px origin-top scale-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-y-100 sm:-left-7"
                 aria-hidden
               />
 

@@ -44,6 +44,19 @@ The experience section renders as a `terraform plan`. Each entry carries an `op`
 
 The `Plan: N to add, N to change, N to destroy` line under each role is computed from the entries, so it stays correct when you edit them.
 
+## Theming
+
+Dark and light both ship. First visit follows the OS setting; the toggle in the top bar overrides it and persists to `localStorage` under `mk-theme`.
+
+Colours live in one place — [`app/globals.css`](app/globals.css). The `@theme` block holds dark; `:root[data-theme="light"]` overrides it. Utilities compile to `var(--color-*)`, so redefining the variables is all a theme switch does. Every foreground/background pair clears WCAG AA.
+
+Two things to know before editing that file:
+
+- The theme rules are **deliberately unlayered**. The base `html` rule is unlayered too, and anything inside `@layer` loses to it — `color-scheme` silently stops switching.
+- The light palette appears **twice**, once for the explicit `data-theme` and once inside a `prefers-color-scheme` media query for the no-JS case. A selector list can't span an `@media` boundary, so the two must be edited together.
+
+The WebGL field is themed separately in [`hero-field.tsx`](components/hero-field.tsx), because colour alone isn't enough: dark composites points **additively** so the scan band blooms, which on a light background would only erase paper. Light switches to normal blending with darker ink and a higher resting alpha — additive accumulates where points overlap and normal blending doesn't, so matching values would render far fainter. The two palettes were matched by measuring mean contrast against each theme's own background.
+
 ## Layout
 
 ```
@@ -54,6 +67,7 @@ app/
 components/
   hero.tsx          hero copy + load sequence
   hero-field.tsx    WebGL point field (lazy, client-only)
+  theme.tsx         theme hook, toggle, pre-paint init script
   plan.tsx          the terraform-plan experience section
   work.tsx  capabilities.tsx  contact.tsx  rail.tsx  topbar.tsx
   reveal.tsx        shared scroll-reveal primitives

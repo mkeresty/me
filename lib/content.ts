@@ -11,10 +11,10 @@ export const profile = {
   region: "us-gov-east-1",
   email: "kerestymason@gmail.com",
   github: "https://github.com/mkeresty",
-  linkedin: "https://www.linkedin.com/in/masonkeresty",
+  linkedin: "https://www.linkedin.com/in/mason-keresty/",
   resume: "/Mason-Keresty-Resume.pdf",
   thesis:
-    "I build AI systems and the secure cloud platforms they run on — for federal, defense, and research teams who have to prove the whole thing is safe before it ships.",
+    "I build AI systems and the secure cloud platforms they run on — for federal, defense, and research environments where nothing ships without proof.",
 } as const;
 
 /* ------------------------------------------------------------------ */

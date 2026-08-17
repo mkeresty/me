@@ -3,10 +3,16 @@
 /* ==================================================================
    Design tokens
    ------------------------------------------------------------------
-   Palette: a blue-shifted void rather than neutral black, so the
+   Dark is a blue-shifted void rather than neutral black, so the
    Cherenkov-blue signal sits *in* the surface instead of on top of it.
+   Light is the same idea inverted: cool paper and ink, not white.
+
    Amber and rose appear in exactly one place — the plan gutter — where
    add / change / destroy carry real meaning.
+
+   Every pair below clears WCAG AA against its own background.
+   Utilities reference these as var(), so redefining them per theme
+   below is all that's needed to switch.
    ================================================================== */
 @theme {
   --color-void: #08090c;
@@ -15,7 +21,7 @@
   --color-rule: #1a1e27;
   --color-rule-lit: #272d3a;
 
-  --color-dim: #5f6672;
+  --color-dim: #737b8a;
   --color-mid: #8b93a3;
   --color-text: #d6dae3;
   --color-bright: #f2f4f8;
@@ -39,6 +45,73 @@
 }
 
 /* ==================================================================
+   Light theme
+   ------------------------------------------------------------------
+   Paper and ink, not an inversion: the canvas keeps a cool cast so the
+   same blue still belongs to it, and the accents darken rather than
+   simply flipping lightness.
+
+   An inline script in layout.tsx stamps data-theme before first paint,
+   so there is no flash. The media query is the no-JS fallback and only
+   applies while no explicit choice has been stamped.
+   ================================================================== */
+/* Unlayered on purpose: the base `html` rule below is unlayered too, and
+   anything inside a cascade layer would lose to it. */
+:root {
+  color-scheme: dark;
+}
+
+/* The two selectors below carry identical declarations and must stay in
+   sync. CSS has no way to share them: the first is an attribute match,
+   the second is media-conditional, and a selector list cannot be split
+   across an @media boundary. */
+:root[data-theme="light"] {
+  --color-void: #f4f6f9;
+  --color-surface: #ffffff;
+  --color-raised: #fbfcfd;
+  --color-rule: #dfe3ea;
+  --color-rule-lit: #c2cad7;
+
+  --color-dim: #626a79;
+  --color-mid: #454d5c;
+  --color-text: #1c2029;
+  --color-bright: #070910;
+
+  --color-signal: #3a54c4;
+  --color-signal-deep: #6b8afd;
+  --color-signal-wash: #eaeefc;
+
+  --color-amber: #8f5a0d;
+  --color-rose: #ab2f3c;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --color-void: #f4f6f9;
+    --color-surface: #ffffff;
+    --color-raised: #fbfcfd;
+    --color-rule: #dfe3ea;
+    --color-rule-lit: #c2cad7;
+
+    --color-dim: #626a79;
+    --color-mid: #454d5c;
+    --color-text: #1c2029;
+    --color-bright: #070910;
+
+    --color-signal: #3a54c4;
+    --color-signal-deep: #6b8afd;
+    --color-signal-wash: #eaeefc;
+
+    --color-amber: #8f5a0d;
+    --color-rose: #ab2f3c;
+
+    color-scheme: light;
+  }
+}
+
+/* ==================================================================
    Base
    ================================================================== */
 html {
@@ -47,7 +120,21 @@ html {
      at every width because of the sticky section headers. */
   scroll-padding-top: 5rem;
   background-color: var(--color-void);
-  color-scheme: dark;
+}
+
+/* Theme changes should read as a deliberate switch, not a repaint. */
+html,
+body {
+  transition:
+    background-color 0.35s var(--ease-out-expo),
+    color 0.35s var(--ease-out-expo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body {
+    transition: none;
+  }
 }
 
 body {

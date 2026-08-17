@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { useTheme, type Theme } from "./theme";
 
 /* ------------------------------------------------------------------ *
  * A low-angle point field with a scan line sweeping through it.
@@ -68,6 +69,8 @@ const FRAGMENT = /* glsl */ `
   uniform vec3  uBase;
   uniform vec3  uSignal;
   uniform float uOpacity;
+  uniform float uGlow;   // additive bloom on dark; off for ink-on-paper
+  uniform float uFloor;  // resting alpha of an unlit point
 
   varying float vFlare;
   varying float vHeight;
@@ -81,21 +84,38 @@ const FRAGMENT = /* glsl */ `
     float alpha = smoothstep(0.25, 0.0, r);
     float lit = clamp(vFlare * 1.4 + max(vHeight, 0.0) * 0.5, 0.0, 1.0);
 
-    vec3 col = mix(uBase, uSignal, lit) + uSignal * vFlare * 0.6;
+    vec3 col = mix(uBase, uSignal, lit) + uSignal * vFlare * 0.6 * uGlow;
 
-    gl_FragColor = vec4(col, alpha * vFade * uOpacity * (0.5 + lit * 0.5));
+    gl_FragColor = vec4(col, alpha * vFade * uOpacity * (uFloor + lit * (1.0 - uFloor)));
     #include <colorspace_fragment>
   }
 `;
+
+/**
+ * Dark composites additively so the scan band blooms. Light cannot —
+ * adding light to paper only erases it — so points are laid down as ink
+ * with normal blending and the band reads by darkening instead.
+ *
+ * Light needs a much darker base and a higher resting alpha to land at
+ * the same visual weight: additive accumulates where points overlap,
+ * normal blending does not. These values were matched by measuring mean
+ * contrast against each theme's own background.
+ */
+const PALETTE = {
+  dark: { base: "#46608f", signal: "#6b8afd", glow: 1, floor: 0.5, blending: THREE.AdditiveBlending },
+  light: { base: "#4a5a80", signal: "#3a54c4", glow: 0, floor: 0.72, blending: THREE.NormalBlending },
+} as const;
 
 type FieldProps = {
   density: number;
   interactive: boolean;
   frozen: boolean;
+  theme: Theme;
 };
 
-function Field({ density, interactive, frozen }: FieldProps) {
+function Field({ density, interactive, frozen, theme }: FieldProps) {
   const { size, invalidate } = useThree();
+  const material = useRef<THREE.ShaderMaterial>(null);
 
   const cols = Math.max(2, Math.round(140 * density));
   const rows = Math.max(2, Math.round(92 * density));
@@ -128,11 +148,28 @@ function Field({ density, interactive, frozen }: FieldProps) {
       uSize: { value: 3 },
       uDpr: { value: 1 },
       uOpacity: { value: 0 },
-      uBase: { value: new THREE.Color("#46608f") },
-      uSignal: { value: new THREE.Color("#6b8afd") },
+      uGlow: { value: PALETTE.dark.glow as number },
+      uFloor: { value: PALETTE.dark.floor as number },
+      uBase: { value: new THREE.Color(PALETTE.dark.base) },
+      uSignal: { value: new THREE.Color(PALETTE.dark.signal) },
     }),
     [],
   );
+
+  // Swapping the palette also swaps how points composite, so the material
+  // needs recompiling — not just new uniform values.
+  useEffect(() => {
+    const p = PALETTE[theme];
+    uniforms.uBase.value.set(p.base);
+    uniforms.uSignal.value.set(p.signal);
+    uniforms.uGlow.value = p.glow;
+    uniforms.uFloor.value = p.floor;
+    if (material.current) {
+      material.current.blending = p.blending;
+      material.current.needsUpdate = true;
+    }
+    invalidate();
+  }, [theme, uniforms, invalidate]);
 
   // Points need to read larger on narrow viewports or the field turns to noise.
   useEffect(() => {
@@ -196,12 +233,13 @@ function Field({ density, interactive, frozen }: FieldProps) {
         <bufferAttribute attach="attributes-aRand" args={[randoms, 1]} />
       </bufferGeometry>
       <shaderMaterial
+        ref={material}
         uniforms={uniforms}
         vertexShader={VERTEX}
         fragmentShader={FRAGMENT}
         transparent
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
+        blending={PALETTE[theme].blending}
       />
     </points>
   );
@@ -210,6 +248,7 @@ function Field({ density, interactive, frozen }: FieldProps) {
 export default function HeroField() {
   const [reduced, setReduced] = useState(false);
   const [small, setSmall] = useState(false);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -235,7 +274,12 @@ export default function HeroField() {
       frameloop={reduced ? "demand" : "always"}
       style={{ pointerEvents: "none" }}
     >
-      <Field density={small ? 0.55 : 1} interactive={!small && !reduced} frozen={reduced} />
+      <Field
+        density={small ? 0.55 : 1}
+        interactive={!small && !reduced}
+        frozen={reduced}
+        theme={theme}
+      />
     </Canvas>
   );
 }
