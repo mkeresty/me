@@ -95,6 +95,29 @@ Senior software engineer building AI-enabled security products and secure cloud 
 - Contributed to patent-backed neutron-compatible rheology technology through prior-art research, component selection, prototyping, and deployment with university and national-laboratory partners.
 - Designed a compact right-angle rheometer gearbox to minimize backlash, friction, and parasitic torque, and supported materials development for spacesuit-layer fabric systems.
 
+## Independent Projects
+
+### Editora.sh | 2026–Present
+
+- Architecting a collaborative Markdown workspace in Next.js and strict TypeScript around Tiptap/ProseMirror, with PostgreSQL and Drizzle persistence and Neon-backed authentication; kept Markdown as the canonical portable representation rather than coupling document state to a proprietary editor format.
+- Implemented realtime multi-user editing with Yjs CRDTs, authenticated document rooms, presence and remote cursors, persisted collaboration state, reconnect/recovery behavior, and end-to-end two-browser tests that verify replicas converge after concurrent edits.
+- Built the editor and workspace interaction layer around a centralized keyboard-shortcut registry and command palette, including quick document switching, focus mode, Markdown source view, autosave state, export, and developer-oriented navigation.
+- Designed a repository-independent document model with an optional Git-backed integration boundary, allowing the editor to work as a standalone collaborative system while preserving a path to Markdown import/export, diff review, commits, and pull-request workflows.
+
+### Linagee Name Registrar | 2022–2025
+
+- Discovered a forgotten Ethereum name registrar deployed in August 2015 by programmatically analyzing contracts from the network’s earliest blocks, then decompiling and reverse-engineering undocumented bytecode to reconstruct the behavior and state model of the immutable contract.
+- Built the application and protocol-integration layer required to make the dormant contract usable again, including name registration and resolution workflows, contract interaction tooling, indexing of on-chain registrar state, and developer-facing integrations around an unchangeable legacy protocol.
+- Operated the surrounding infrastructure as usage grew from a historical discovery to hundreds of thousands of registered names, maintaining compatibility with the original contract while evolving the off-chain services and product experience around it over several years.
+- Worked across protocol research, smart-contract integration, blockchain data, backend infrastructure, and user-facing product development, taking the project from an unexplained piece of early Ethereum history through a functioning production ecosystem.
+
+### Stampverse
+
+- Contributed to a full-stack marketplace and explorer for Bitcoin-native digital assets, working across the data pipeline that transformed blockchain-derived asset and transaction data into normalized records used by search, discovery, ownership views, and marketplace features.
+- Built product and backend functionality around protocol-specific asset metadata, transaction history, ownership state, collection and asset discovery, and APIs that exposed indexed blockchain state to the user-facing application.
+- Developed marketplace and explorer flows that connected indexed on-chain state to browsing and trading experiences, requiring coordination between asynchronous blockchain data, application persistence, API behavior, and frontend state.
+- Worked across the stack rather than treating the project as a standalone UI, contributing to the infrastructure and application layers needed to turn raw Bitcoin ecosystem data into a responsive, searchable product.
+
 ## Earlier Experience
 
 **Air Liquide | Process Engineering Intern | Newport, DE | 2019–2020**  
