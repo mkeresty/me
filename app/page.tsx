@@ -1,5 +1,6 @@
 import { Hero } from "@/components/hero";
 import { Work } from "@/components/work";
+import { IndependentWork } from "@/components/independent-work";
 import { Plan } from "@/components/plan";
 import { Capabilities } from "@/components/capabilities";
 import { Contact } from "@/components/contact";
@@ -22,6 +23,7 @@ export default function Page() {
       <main>
         <Hero />
         <Work />
+        <IndependentWork />
         <Plan />
         <Capabilities />
       </main>
