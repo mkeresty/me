@@ -30,6 +30,9 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Generate public resume
+        run: npm run resume
+
       - name: Resolve base path
         id: base
         env:
