@@ -111,7 +111,7 @@ Senior software engineer building AI-enabled security products and secure cloud 
 - Operated the surrounding infrastructure as usage grew from a historical discovery to hundreds of thousands of registered names, maintaining compatibility with the original contract while evolving the off-chain services and product experience around it over several years.
 - Worked across protocol research, smart-contract integration, blockchain data, backend infrastructure, and user-facing product development, taking the project from an unexplained piece of early Ethereum history through a functioning production ecosystem.
 
-### Stampverse
+### Stampverse | 2023–2024
 
 - Contributed to a full-stack marketplace and explorer for Bitcoin-native digital assets, working across the data pipeline that transformed blockchain-derived asset and transaction data into normalized records used by search, discovery, ownership views, and marketplace features.
 - Built product and backend functionality around protocol-specific asset metadata, transaction history, ownership state, collection and asset discovery, and APIs that exposed indexed blockchain state to the user-facing application.
