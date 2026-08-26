@@ -32,7 +32,7 @@ const independentProjects = [
   },
   {
     title: "Stampverse",
-    period: "Independent project",
+    period: "2023—2024",
     kind: "blockchain data · marketplace · explorer",
     summary:
       "Built a marketplace and explorer for Bitcoin-native digital assets, spanning the data and product layers needed to turn on-chain activity into a searchable, usable application.",
